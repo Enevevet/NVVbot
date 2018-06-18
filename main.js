@@ -1,19 +1,27 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config.json");
+const tarpin = "tarpin";
+const tarpinMajed = "Tarpin";
 
 
 client.on("ready", () => {
-    client.user.setActivity('Enevevet se défoncer à coder le -req', {
+    client.user.setActivity('Enevevet se suicider suite à son Bac de Français ❤', {
         type: 'Watching',
     });
     console.log("Ready NVV !!!");
 });
 
 client.on("message", (message) => {
-    if (message.author.id === "272676235946098688") {
+    /*if (message.author.id === "272676235946098688") {
         message.channel.send("Mouais")
+    }*/
+    if (message.content.toLowerCase() === "tarpin") {
+        message.channel.send('Good')
     }
+    /*if (((message.toLowerCase.content.includes(tarpin))||(message.content.includes(tarpinMajed))) && (message.author.id != "441162184337391626")) {
+        message.reply("sale sudiste. Arrête de dire \"tarpin\" !")
+    }*/
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
     if (!message.content.startsWith(config.prefix) || message.author.bot) return;
@@ -21,15 +29,6 @@ client.on("message", (message) => {
     if (message.content.startsWith(config.prefix + "ping")) {
         let late = Math.abs(new Date().getTime() - message.createdTimestamp)
         message.channel.send(`Pong ! ${late} ms`);
-    }
-    if (message.content.startsWith(config.prefix + "prefix")) {
-        // Gets the prefix from the command
-        let newPrefix = message.content.split(" ").slice(1, 2)[0];
-        // change the configuration in memory
-        config.prefix = newPrefix;
-
-        // Now we have to save the file.
-        fs.writeFile("./config.json", JSON.stringify(config), (err) => console.error);
     }
     if (command === "salut") {
         let [age, sexe, ville] = args;
@@ -57,7 +56,7 @@ client.on("message", (message) => {
             "embed": {
                 "title": "Dernière màj :",
                 "description": "18/06/2018",
-                "color": 1677721,
+                "color": Math.floor(Math.random() * 16777214) + 1,
                 "footer": {
                     "icon_url": "https://images-ext-2.discordapp.net/external/yukS6J8Ni3eVSnxiz8Hm6X3lKpF_zcyeKwylzAtiEww/%3Fsize%3D2048/https/cdn.discordapp.com/avatars/329669021043523594/d44fb06af2453336e3c52fb4921f4723.png?width=473&height=473",
                     "text": "JsTester by Enevevet#2020"
@@ -78,6 +77,10 @@ client.on("message", (message) => {
                     {
                         "name": "Ajout du `%tableflip`",
                         "value": "Alias `%tf`, envoie un tableflip animé"
+                    },
+                    {
+                        "name": "Ajout de l'interdiction de dire \'tarpin\'",
+                        "value": "Le bot vous reprendra dès que vous dire tarpin maintenant :')"
                     }
 
                 ]
@@ -85,22 +88,33 @@ client.on("message", (message) => {
         }
         message.channel.send(upembed)
     }
-
-    if ((command === "tableflip") || (command === "tf")) {
-        message.channel.send("(°-°)\\ ┳━┳").then(sentMessage => {
+    if ((command === "tg") || (command === "ftg")) {
+        message.channel.send("1").then(sentMessage => {
             setTimeout(() => {
+                sentMessage.edit('2')
                 setTimeout(() => {
-                    sentMessage.edit('(╮°-°)╮┳━┳')
-                }, 500)
-                sentMessage.edit("(╯°□°)╯    ]")
-                setTimeout(() => {
-                    sentMessage.edit('(╯°□°)╯  ︵  ┻━┻')
-                }, 500)
-            }, 500)
-
+                    sentMessage.edit("3")
+                    setTimeout(() => {
+                        sentMessage.edit("4")
+                    }, 1000)
+                }, 1000)
+            }, 1000)
         })
 
 
+    }
+    if ((command === "tableflip") || (command === "tf")) {
+        message.channel.send("(°-°)\\ ┳━┳").then(sentMessage => {
+            setTimeout(() => {
+                sentMessage.edit('(╮°-°)╮┳━┳')
+                setTimeout(() => {
+                    sentMessage.edit("(╯°□°)╯    ]")
+                    setTimeout(() => {
+                        sentMessage.edit('(╯°□°)╯  ︵  ┻━┻')
+                    }, 750)
+                }, 750)
+            }, 750)
+        })
     }
     if (command === "kick") {
         let user = message.mentions.users.first() ? message.mentions.users.first() : message.author
