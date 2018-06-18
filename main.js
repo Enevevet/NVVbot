@@ -4,19 +4,23 @@ const config = require("./config.json");
 
 
 client.on("ready", () => {
-    client.user.setActivity('Paulé faire joujou avec moi', {
+    client.user.setActivity('Enevevet se défoncer à coder le -req', {
         type: 'Watching',
     });
-    console.log("Le message qui confirme que t'as démarré ton bot");
+    console.log("Ready NVV !!!");
 });
 
 client.on("message", (message) => {
+    if (message.author.id === "272676235946098688") {
+        message.channel.send("Mouais")
+    }
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
     if (!message.content.startsWith(config.prefix) || message.author.bot) return;
 
     if (message.content.startsWith(config.prefix + "ping")) {
-        message.channel.send("Pong !")
+        let late = Math.abs(new Date().getTime() - message.createdTimestamp)
+        message.channel.send(`Pong ! ${late} ms`);
     }
     if (message.content.startsWith(config.prefix + "prefix")) {
         // Gets the prefix from the command
@@ -32,16 +36,71 @@ client.on("message", (message) => {
         message.reply(`Salut ${message.author.username}, tu as ${age} ans, tu es un ${sexe} qui vient de ${ville}`);
     }
     if (command === "kicka") {
-        if (message.member.hasPermission("KICK_MEMBERS")) {
-            let member = message.mentions.members.first();
-            member.kick()
-                .then(console.log)
-                .catch(console.error);
-            message.channel.send(`J'ai kick ce con de ${member}`)
+        if (!args[0]) {
+            message.channel.send("Dis-moi qui je dois kick :face_palm::skin-tone-3:")
         }
         else {
-            message.channel.send("T'as pas de perms débile")
+            if (message.member.hasPermission("KICK_MEMBERS")) {
+                let member = message.mentions.members.first();
+                member.kick()
+                    .then(console.log)
+                    .catch(console.error);
+                message.channel.send(`J'ai kick ce con de ${member}`)
+            }
+            else {
+                message.channel.send("T'as pas de perms débile")
+            }
         }
+    }
+    if ((command === "updates") || (command === "news")) {
+        let upembed = {
+            "embed": {
+                "title": "Dernière màj :",
+                "description": "18/06/2018",
+                "color": 1677721,
+                "footer": {
+                    "icon_url": "https://images-ext-2.discordapp.net/external/yukS6J8Ni3eVSnxiz8Hm6X3lKpF_zcyeKwylzAtiEww/%3Fsize%3D2048/https/cdn.discordapp.com/avatars/329669021043523594/d44fb06af2453336e3c52fb4921f4723.png?width=473&height=473",
+                    "text": "JsTester by Enevevet#2020"
+                },
+                "thumbnail": {
+                    "url": "https://www.iconspng.com/uploads/js/js.png"
+                },
+                "author": {
+                    "name": "Dernières nouveautés :",
+                    "url": "https://discord.gg/tvEPfjv",
+                    "icon_url": "https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/141/construction-sign_1f6a7.png"
+                },
+                "fields": [
+                    {
+                        "name": "Ajout du `%updates`",
+                        "value": "Alias `%news`, permet de voir les derniers ajouts sur le bot"
+                    },
+                    {
+                        "name": "Ajout du `%tableflip`",
+                        "value": "Alias `%tf`, envoie un tableflip animé"
+                    }
+
+                ]
+            }
+        }
+        message.channel.send(upembed)
+    }
+
+    if ((command === "tableflip") || (command === "tf")) {
+        message.channel.send("(°-°)\\ ┳━┳").then(sentMessage => {
+            setTimeout(() => {
+                setTimeout(() => {
+                    sentMessage.edit('(╮°-°)╮┳━┳')
+                }, 500)
+                sentMessage.edit("(╯°□°)╯    ]")
+                setTimeout(() => {
+                    sentMessage.edit('(╯°□°)╯  ︵  ┻━┻')
+                }, 500)
+            }, 500)
+
+        })
+
+
     }
     if (command === "kick") {
         let user = message.mentions.users.first() ? message.mentions.users.first() : message.author
@@ -74,10 +133,18 @@ client.on("message", (message) => {
 
     }
     if (command === 'emid') {
-        let emo = args.join(" ")
-        message.guild.emojis.name("440249550121205760")
-        console.log(emo)
+        let arg = args.join(" ")
+        let emo = message.guild.emojis.find("name", `:${args}:`)
+        message.reply(`<#${emo.id}> id : ${emo.id}`)
     }
+    if (command === "t") {
+        let idaccept = args.join(" ");
+        let rolesu = message.guild.roles.find("name", `support-${idaccept}`)
+        let nbrolesu = message.guild.roles.get(rolesu.id).members.size
+        console.log(nbrolesu)
+        let chasu = message.guild.channels.find("name", `request-${idaccept}`)
+    }
+
     if (command === "say") {
         if (!args[0]) {
             message.channel.send("Dis-moi ce que je dois répéter :face_palm::skin-tone-3:")
@@ -89,11 +156,11 @@ client.on("message", (message) => {
         }
 
     }
-    if (command === "time") {
-        message.reply("Euh...")
-        setTimeout(() => {
-            message.reply("...5 secondes plus tard...")
-        }, 5000)
+    if (command === "time") {        //ça tu connais
+        message.reply("Euh...")     //envoie un message
+        setTimeout(() => {          //indique qu'il va falloir faire le contenu de la boucle après un certain temps
+            message.reply("...5 secondes plus tard...")    //contenu qu'il va falloir executer après le certain temps
+        }, 5000)                                           // temps après lequel le contenu de la boucle va être executé
     }
     if (command === "nombre") {
         const sayMessage = args.join(" ");
@@ -189,7 +256,13 @@ client.on("message", (message) => {
             message.channel.send("MDRRRRR t'as cru t'étais mon owner ?")
         }
     }
-    if (message.content === "Itrema...") {
+    if (command === "number") {
+        let pute = args.join(" ")
+        let num = parseInt(pute)
+        let nidza = num + 1
+        console.log(nidza)
+    }
+    if (message.content.startsWith("Itrema...")) {
         message.channel.send("... un putain de connard !")
     }
     if (command === "stop") {
@@ -227,16 +300,16 @@ client.on("message", (message) => {
 
     }
     if (command === "s") {
-        message.channel.send('Test')
-        setTimeout(() => {
-            message.react('✅')
-        }, 1000)
+        message.channel.send('✅').then(sentMessage => {
+            sentMessage.react('✅');
+        });
+
     }
     if ((command === "req") || (command === "request")) {
-        if (message.guild.channels.exists("name", `request-${message.author.id}`)) {
+        if (message.guild.channels.exists("name", `request-${message.author.id}`)) { //déjà un projet
             message.reply("tu as déjà un projet en cours !")
         }
-        else {
+        else { //pas de projets encore
             message.guild.createRole({
                 name: `support-${message.author.id}`
             })
@@ -251,43 +324,141 @@ client.on("message", (message) => {
                     cha.edit({ topic: `Support ${message.author.id} :\n${reason} pour ${message.author.username}#${message.author.discriminator}` })
                     message.delete().catch()
                     message.reply(`votre requête pour ${reason} vient d'être envoyée ! Merci d'attendre en <#${cha.id}> qu'un Créateur vous réponde !`)
+                    cha.send("Voici le channel où se déroulera votre rencontre et la coopération avec le créateur !\nVous pouvez dès maintenant commencer à écrire des informations ou même le lien de votre serveur pour un travail plus efficace dès la prise en charge par un créateur !").then(sentMessage => {
+                        sentMessage.pin()
+                    });
 
                 }, 4000)
             }, 2000)
             message.channel.stopTyping()
             let creacha = client.channels.find("name", `créateurs`)
-            creacha.send(`Nouvelle demande de serveur par ${message.author.username}#${message.author.discriminator} pour ${reason} ! Faîtes \`accept\` !`)
+            creacha.send(`Nouvelle demande de serveur par ${message.author.username}#${message.author.discriminator} pour ${reason} ! Faîtes :\n\`\`\`js\n%accept ${message.author.id}\`\`\``)
             let rolesupport = message.guild.roles.find("name", `support-${message.author.id}`)
-            const collector = new Discord.MessageCollector(creacha, m => m.author.id === message.author.id);
-            console.log(collector)
-            collector.on('collect', message => {
-                console.log(message)
-                if (message.content === `accept`) {
-                    message.channel.send("1");
-                    message.member.addRole(rolesupport);
-                } else if (message.content === "2") {
-                    message.channel.send("2");
-                }
-            })
-            console.log("Sorti")
         }
     }
-    if (command === "requ") {
-        //let [raison] = args;
-        let reason = args.slice(0).join(" ");
-        message.guild.createRole({
-            name: `support-${message.author.id}`
-        })
-        console.log("Créé")
-        let rolesupport = message.guild.roles.find("calculatedPosition", 1)
-        message.member.addRole(rolesupport)
-        message.guild.createChannel(`request-${message.author.id}`)
-
-            .then(supportch.channel.edit({ topic: `Support ${message.author.id} :\n${reason} pour ${message.author.username}#${message.author.discriminator}` }))
-        /*.then(create => message.reply(`votre requête pour ${reason} vient d'être envoyée ! Merci d'attendre en <#${clone.id}> qu'un Créateur vous réponde !`))
-        .catch(console.error);*/
+    if (command === "u") {
+        let idaccept = args.join(" ");
+        let crea = message.author.id
+        let rolesu = message.guild.roles.find("name", `support-${idaccept}`)
+        let nbrolesu = message.guild.roles.get(rolesu.id).members.size
+        let chasu = message.guild.channels.find("name", `request-${idaccept}`)
+        message.guild.member(`${idaccept}`).send(`Salut ! <@${crea}> vient d'accepter ta demande de création de serveur ! Rends-toi en ${chasu} dès maintenant !`)
+        message.reply(`Done !`)
     }
+    if (command === "purge") {
+        let nums = args.join(" ")
+        if (!args[0]) {
+            message.channel.send("Merci de me dire combien de message tu veux supprimer !")
+        }
+        else {
+            let num = parseInt(nums)
+            if (num !== Number) {
+                message.channel.send("Merci de rentrer un chiffre !")
+            }
+            else {
+                let numa = num + 1
+                message.channel.bulkDelete(numa)
+                message.channel.send(`${num} messages supprimés !`).then(sentMessage => {
+                    setTimeout(() => {
+                        sentMessage.delete()
+                    }, 3000)
+                })
 
+
+            }
+        }
+    }
+    if (command === "accept") {
+        let rolecrea = message.guild.roles.find("name", "Créateur")
+        if (message.member.roles.find("name", "Créateur")) { //créa
+            if (!args[0]) { //pas d'args
+                message.channel.send("Dis-moi quelle affaire tu veux prendre en charge :face_palm::skin-tone-3:")
+            }
+            else { //args présents
+                let idaccept = args.join(" ");
+                let crea = message.author
+                let suclient = client.users.get(`${idaccept}`)
+                let rolesu = message.guild.roles.find("name", `support-${idaccept}`)
+                let nbrolesu = message.guild.roles.get(rolesu.id).members.size
+                let chasu = message.guild.channels.find("name", `request-${idaccept}`)
+                let projcha = message.guild.channels.find("name", "projets")
+                let hshake = message.guild.emojis.find("name", "hshake")
+                if (message.guild.roles.exists("name", `support-${idaccept}`)) { //bon projet
+                    if (nbrolesu >= 2) { //déjà qql
+                        message.reply("un autre créateur a déjà pris l'affaire, désolé !")
+                    }
+                    else { //personne dessus
+                        message.member.addRole(rolesu)
+                        var embedo = {
+                            "embed": {
+                                "title": `Une affaire vient d'être acceptée !`,
+                                "description": `Rendez-vous en ${chasu} !`,
+                                "color": Math.floor(Math.random() * 16777214) + 1,
+                                "footer": {
+                                    "icon_url": "https://cdn.discordapp.com/emojis/453968387077570572.png?v=1",
+                                    "text": "FanCreate"
+                                },
+                                "thumbnail": {
+                                    "url": "https://cdn.discordapp.com/icons/432267428685283328/7b9d1b9b2e75b8dfe3f57c78b7f5a0ef.jpg"
+                                },
+                                "author": {
+                                    "name": "Création de serveur :",
+                                    "url": "https://discord.gg/tvEPfjv",
+                                    "icon_url": "https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/141/construction-sign_1f6a7.png"
+                                },
+                                "fields": [
+                                    {
+                                        "name": "Client :",
+                                        "value": `@${suclient.username}#${suclient.discriminator}`,
+                                        "inline": true
+                                    },
+                                    {
+                                        "name": "Créateur :",
+                                        "value": `@${crea.username}#${crea.discriminator}`,
+                                        "inline": true
+                                    }
+                                ]
+                            }
+                        }
+                        projcha.send(embedo).then(sentMessage => {
+                            sentMessage.react(hshake)
+                        })
+                        let embed = {
+                            "embed": {
+                                "title": "Votre devis de serveur vient d'être accepté !",
+                                "description": `<@${crea.id}> vient d'accepter ta demande`,
+                                "color": Math.floor(Math.random() * 16777214) + 1,
+                                "footer": {
+                                    "icon_url": "https://cdn.discordapp.com/emojis/453968387077570572.png?v=1",
+                                    "text": "FanCreate"
+                                },
+                                "thumbnail": {
+                                    "url": "https://cdn.discordapp.com/icons/432267428685283328/7b9d1b9b2e75b8dfe3f57c78b7f5a0ef.jpg"
+                                },
+                                "author": {
+                                    "name": "Création de serveur :",
+                                    "url": "https://discord.gg/tvEPfjv",
+                                    "icon_url": "https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/141/construction-sign_1f6a7.png"
+                                }
+                            }
+                        }
+                        message.guild.member(`${idaccept}`).send(embed).then(sentMessage => {
+                            sentMessage.pin()
+                        });
+                        chasu.send(`Le projet est pris en charge par <@${crea.id}> !`).then(sentMessage => {
+                            sentMessage.pin()
+                        });
+                    }
+                }
+                else { //mauvais projet
+                    message.channel.send("Ce projet n'existe pas ! :face_palm::skin-tone-3:")
+                }
+            }
+        }
+        else { //pas créa
+            message.channel.send("Tu n'es pas Créateur, n'essaie pas d'accepter une affaire :face_palm::skin-tone-3:")
+        }
+    }
 
 });
 
