@@ -1,8 +1,6 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config.json");
-const tarpin = "tarpin";
-const tarpinMajed = "Tarpin";
 
 
 client.on("ready", () => {
@@ -13,15 +11,28 @@ client.on("ready", () => {
 });
 
 client.on("message", (message) => {
-    /*if (message.author.id === "272676235946098688") {
+    /*if (message.author.id === "272676235946098688") {                    //(Commande de cancérage pour locker)
         message.channel.send("Mouais")
     }*/
-    if (message.content.toLowerCase() === "tarpin") {
-        message.channel.send('Good')
+    if (message.content.endsWith("hein")) {
+        message.channel.send("2").then(sentMessage => {
+            setTimeout(() => {
+                sentMessage.edit('3')
+                setTimeout(() => {
+                    sentMessage.edit("Soleil !")
+                    setTimeout(() => {
+                        sentMessage.react('☀')
+                    }, 1000)
+                }, 1000)
+            }, 1000)
+        })
     }
-    /*if (((message.toLowerCase.content.includes(tarpin))||(message.content.includes(tarpinMajed))) && (message.author.id != "441162184337391626")) {
-        message.reply("sale sudiste. Arrête de dire \"tarpin\" !")
-    }*/
+    if ((message.content.toLowerCase().includes('tarpin')) && (message.author.id != "441162184337391626")) {
+        message.reply('sale sudiste. Arrête de dire \"tarpin\" !')
+    }
+    if (message.content.startsWith("Itrema...")) {
+        message.channel.send("... un putain de connard !")
+    }
     const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
     if (!message.content.startsWith(config.prefix) || message.author.bot) return;
@@ -31,8 +42,22 @@ client.on("message", (message) => {
         message.channel.send(`Pong ! ${late} ms`);
     }
     if (command === "salut") {
+        let args0Number = Number(args[0])
         let [age, sexe, ville] = args;
-        message.reply(`Salut ${message.author.username}, tu as ${age} ans, tu es un ${sexe} qui vient de ${ville}`);
+        if (!args[2]) {
+            message.reply("Précise, ton âge, ton type et ton lieu tel que : \`%salut 15 développeur Paris\`")
+        }
+        else {
+            if ((args[0] == Number) && (args[1] == String) && (args[2] == String)) {
+                message.channel.send(`Salut <@${message.author.id}>, tu as ${age} ans, tu es un ${sexe} qui vient de ${ville}`);
+            } else if (args0Number !== Number) {
+                message.reply('merci de rentrer un âge correct !')
+            } else if (args[1] !== String) {
+                message.reply('merci de rentrer un type correct !')
+            } else if (args[2] !== String) {
+                message.reply('merci de rentrer un lieu correct !')
+            }
+        }
     }
     if (command === "kicka") {
         if (!args[0]) {
@@ -51,57 +76,52 @@ client.on("message", (message) => {
             }
         }
     }
-    if ((command === "updates") || (command === "news")) {
-        let upembed = {
-            "embed": {
-                "title": "Dernière màj :",
-                "description": "18/06/2018",
-                "color": Math.floor(Math.random() * 16777214) + 1,
-                "footer": {
-                    "icon_url": "https://images-ext-2.discordapp.net/external/yukS6J8Ni3eVSnxiz8Hm6X3lKpF_zcyeKwylzAtiEww/%3Fsize%3D2048/https/cdn.discordapp.com/avatars/329669021043523594/d44fb06af2453336e3c52fb4921f4723.png?width=473&height=473",
-                    "text": "JsTester by Enevevet#2020"
-                },
-                "thumbnail": {
-                    "url": "https://www.iconspng.com/uploads/js/js.png"
-                },
-                "author": {
-                    "name": "Dernières nouveautés :",
-                    "url": "https://discord.gg/tvEPfjv",
-                    "icon_url": "https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/141/construction-sign_1f6a7.png"
-                },
-                "fields": [
-                    {
-                        "name": "Ajout du `%updates`",
-                        "value": "Alias `%news`, permet de voir les derniers ajouts sur le bot"
-                    },
-                    {
-                        "name": "Ajout du `%tableflip`",
-                        "value": "Alias `%tf`, envoie un tableflip animé"
-                    },
-                    {
-                        "name": "Ajout de l'interdiction de dire \'tarpin\'",
-                        "value": "Le bot vous reprendra dès que vous dire tarpin maintenant :')"
-                    }
-
-                ]
-            }
-        }
-        message.channel.send(upembed)
+    if (command === "emoji") {
+        console.log(args[0])
+        let idad = args[0].substring(19);
+        console.log(idad)
     }
-    if ((command === "tg") || (command === "ftg")) {
-        message.channel.send("1").then(sentMessage => {
+    if ((command === "updates") || (command === "news")) {
+        let upembedR = new Discord.RichEmbed()
+            .setTitle("Dernière màj :")
+            .setDescription("19/06/2018")
+            .setColor(Math.floor(Math.random() * 16777214) + 1)
+            .setFooter("JsTester by Enevevet#2020", "https://images-ext-2.discordapp.net/external/yukS6J8Ni3eVSnxiz8Hm6X3lKpF_zcyeKwylzAtiEww/%3Fsize%3D2048/https/cdn.discordapp.com/avatars/329669021043523594/d44fb06af2453336e3c52fb4921f4723.png?width=473&height=473")
+            .setThumbnail("https://www.iconspng.com/uploads/js/js.png")
+            .setTimestamp()
+            .setAuthor("Dernières nouveautés :", "https://emojipedia-us.s3.amazonaws.com/thumbs/120/twitter/141/construction-sign_1f6a7.png")
+            .addField("Ajout du `%updates`", "Alias `%news`, permet de voir les derniers ajouts sur le bot")
+            .addField("Ajout du `%tableflip`", "Alias `%tf`, envoie un tableflip animé")
+            .addField("Ajout de l'interdiction de dire \'tarpin\'", "Le bot vous reprendra dès que vous dire tarpin maintenant :')")
+            .addField("Ajout du `%suicide`", "Le bot vous montrera un petit bonhomme se suicider depuis un immeuble !")
+            .addField("Ajout du `%autisme`", "Alias `%autism`, permet de calculer votre taux d'autisme !")
+            .addField("Ajout du `%meme`", "Permet de display le meme, soit du chat, du chien, du suicide ou du mille-pattes")
+        message.channel.send(upembedR)
+    }
+    if (command === "suicide") { //regarde pas ça, c'est infâme.... Utilise le juste
+        message.channel.send("━━━━━┒\n┓┏┓┏┓┃\n┛┗┛┗┛┃＼😥／\n┓┏┓┏┓┃    /\n┛┗┛┗┛┃ノ)\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┃┃┃┃┃┃\n┻┻┻┻┻┻").then(sentMessage => {
             setTimeout(() => {
-                sentMessage.edit('2')
+                sentMessage.edit("━━━━━┒\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃＼😥／\n┛┗┛┗┛┃    /\n┓┏┓┏┓┃ノ)\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┃┃┃┃┃┃\n┻┻┻┻┻┻")
                 setTimeout(() => {
-                    sentMessage.edit("3")
+                    sentMessage.edit("━━━━━┒\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃＼😥／\n┓┏┓┏┓┃    /\n┛┗┛┗┛┃ノ)\n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┃┃┃┃┃┃\n┻┻┻┻┻┻")
                     setTimeout(() => {
-                        sentMessage.edit("4")
+                        sentMessage.edit("━━━━━┒\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃＼😥／\n┛┗┛┗┛┃    /\n┓┏┓┏┓┃ノ)\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┃┃┃┃┃┃\n┻┻┻┻┻┻")
+                        setTimeout(() => {
+                            sentMessage.edit("━━━━━┒\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃＼😥／\n┛┗┛┗┛┃    /\n┓┏┓┏┓┃ノ)\n┃┃┃┃┃┃\n┻┻┻┻┻┻")
+                            setTimeout(() => {
+                                sentMessage.edit("━━━━━┒\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┃┃┃┃┃┃\n┻┻┻┻┻┻ 💥")
+                                setTimeout(() => {
+                                    sentMessage.edit("━━━━━┒\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┃┃┃┃┃┃\n┻┻┻┻┻┻ ☁")
+                                    setTimeout(() => {
+                                        sentMessage.edit("━━━━━┒\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃\n┓┏┓┏┓┃\n┃┃┃┃┃┃\n┻┻┻┻┻┻ 💀")
+                                    }, 3000) //l'api accepte pas assez de message :facepalm: du coup ça correspond à à peu près 1000ms
+                                }, 900)
+                            }, 900)
+                        }, 950)
                     }, 1000)
-                }, 1000)
-            }, 1000)
+                }, 1050)
+            }, 1100)
         })
-
-
     }
     if ((command === "tableflip") || (command === "tf")) {
         message.channel.send("(°-°)\\ ┳━┳").then(sentMessage => {
@@ -123,6 +143,33 @@ client.on("message", (message) => {
         }
         else {
             message.reply(`vous avez kick ${user} avec succès !`)
+        }
+
+    }
+    if ((command === "autisme") || (command === "autism")) {
+        let user = message.mentions.users.first() ? message.mentions.users.first() : message.author
+        if (user.id === "441162184337391626") {
+            let tauxdAutisme = 0
+            let colorWtf = 0
+            let embedaR = new Discord.RichEmbed()
+                .setTitle(`Le taux d'autisme de ${user.username}#${user.discriminator} est de :`)
+                .setColor(colorWtf)
+                .setFooter("Tout ceci est du second degré !", "https://cdn.discordapp.com/attachments/440633466128695308/458554014569725954/warn.png")
+                .addField(`${tauxdAutisme}%`, "Il faudrait quand même penser à aller consulter !")
+            message.channel.send(embedaR)
+        } else {
+            var ran = Math.random()
+            var tauxdAutisme = Math.floor(ran * 100)
+            var colorWtf = Math.floor(ran * 16777214) + 1
+            let embedaR = new Discord.RichEmbed()
+                .setTitle(`Le taux d'autisme de ${user.username}#${user.discriminator} est de :`)
+                .setColor(colorWtf)
+                .setThumbnail('attachment://warn.png')
+                .setFooter("Tout ceci est du second degré !", "attachment://warn.png")
+                .attachFile("./ressources/warn.png", "warn.png")
+                .addField(`${tauxdAutisme}%`, "Il faudrait quand même penser à aller consulter !")
+                .setTimestamp()
+            message.channel.send(embedaR)
         }
 
     }
@@ -158,7 +205,11 @@ client.on("message", (message) => {
         console.log(nbrolesu)
         let chasu = message.guild.channels.find("name", `request-${idaccept}`)
     }
-
+    if (command === "meme") {
+        let t = Math.floor(Math.random() * Math.floor(4));
+        let meme = ["━━━━━┒\n┓┏┓┏┓┃\n┛┗┛┗┛┃＼😥／\n┓┏┓┏┓┃    /\n┛┗┛┗┛┃ノ)\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃ \n┛┗┛┗┛┃ \n┓┏┓┏┓┃\n┃┃┃┃┃┃\n┻┻┻┻┻┻", "╭━━━━━╮\n╰┃ ┣▇━▇\n ┃ ┃  ╰━▅╮\n ╰┳╯ ╰━━┳╯\n  ╰╮ ┳━━╯\n ▕▔▋ ╰╮╭━╮\n╱▔╲▋╰━┻┻╮╲╱▔▔▔╲\n▏  ▔▔▔▔▔▔▔  O O┃\n╲╱▔╲▂▂▂▂╱▔╲▂▂▂╱\n ▏╳▕▇▇▕ ▏╳▕▇▇▕\n ╲▂╱╲▂╱ ╲▂╱╲▂╱", "⊂ヽ\n　 ＼＼ Λ＿Λ\n　　 ＼( 'ㅅ' )\n　　　 >　⌒ヽ\n　　　/ 　 へ  ＼\n　　 /　　/　＼＼\n　　 ﾚ　ノ　　 ヽつ\n　　/　/\n　 /　/|\n　(　(ヽ\n　|　|、＼\n　| 丿 ＼ ⌒)\n　| |　　) /\n⊂ヽ", "╚═( ͡° ͜ʖ ͡°)═╝\n╚═(███)═╝\n╚═(███)═╝\n ╚═(███)═╝\n  ╚═(███)═╝\n   ╚═(███)═╝\n   ╚═(███)═╝\n  ╚═(███)═╝\n ╚═(███)═╝\n╚═(███)═╝\n ╚═(███)═╝\n  ╚═(███)═╝\n   ╚═(███)═╝\n   ╚═(███)═╝\n     ╚(███)╝\n       ╚(██)╝"]
+        message.channel.send(meme[t])
+    }
     if (command === "say") {
         if (!args[0]) {
             message.channel.send("Dis-moi ce que je dois répéter :face_palm::skin-tone-3:")
@@ -275,9 +326,6 @@ client.on("message", (message) => {
         let num = parseInt(pute)
         let nidza = num + 1
         console.log(nidza)
-    }
-    if (message.content.startsWith("Itrema...")) {
-        message.channel.send("... un putain de connard !")
     }
     if (command === "stop") {
         if (message.author.id === '329669021043523594') {
